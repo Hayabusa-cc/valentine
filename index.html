@@ -3,37 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>С 14 Февраля! ❤️</title>
+    
+    <title>Для тебя ❤️</title>
+    <meta property="og:title" content="С 14 Февраля! ❤️">
+    <meta property="og:description" content="У меня есть к тебе один важный вопрос... Открой, чтобы узнать!">
+    <meta property="og:image" content="https://img.icons8.com/emoji/400/heart-suit.png">
+    <meta property="og:type" content="website">
+
     <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600&family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
     <style>
         body {
-            margin: 0;
-            padding: 0;
-            height: 100vh;
-            width: 100vw;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            margin: 0; padding: 0; height: 100vh; width: 100vw;
+            display: flex; justify-content: center; align-items: center;
             background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
             font-family: 'Montserrat', sans-serif;
-            overflow: hidden;
-            position: relative;
+            overflow: hidden; position: relative;
         }
 
         /* Фон с сердечками */
         #hearts-container {
-            position: absolute;
-            inset: 0;
-            pointer-events: none;
-            z-index: 1;
+            position: absolute; inset: 0; pointer-events: none; z-index: 1;
         }
 
         .heart {
-            position: absolute;
-            font-size: 24px;
-            bottom: -50px;
-            animation: floatUp 4s linear forwards;
-            opacity: 0.7;
+            position: absolute; font-size: 24px; bottom: -50px;
+            animation: floatUp 4s linear forwards; opacity: 0.7;
         }
 
         @keyframes floatUp {
@@ -50,16 +44,17 @@
             z-index: 10;
             width: 85%;
             max-width: 400px;
-            min-height: 300px; /* Фиксируем высоту для прыжков */
+            min-height: 320px; /* Высота для прыжков кнопки */
             backdrop-filter: blur(10px);
-            position: relative; /* Чтобы кнопка прыгала внутри */
+            position: relative;
+            box-sizing: border-box;
         }
 
         h1 {
             font-family: 'Caveat', cursive;
-            font-size: 3rem;
+            font-size: 2.8rem;
             color: #ff4d4d;
-            margin: 0 0 10px;
+            margin: 0 0 15px;
         }
 
         p {
@@ -73,7 +68,7 @@
             justify-content: center;
             align-items: center;
             gap: 20px;
-            min-height: 100px;
+            min-height: 120px;
         }
 
         button {
@@ -91,15 +86,15 @@
             background-color: #ff4d4d;
             color: white;
             box-shadow: 0 4px 15px rgba(255, 77, 77, 0.4);
-            z-index: 11;
+            z-index: 15;
         }
 
         #btn-no {
             background-color: #f1f1f1;
             color: #555;
-            position: relative; /* Изначально в потоке */
-            z-index: 12;
-            transition: none;
+            position: relative; /* Начинает в карточке */
+            z-index: 14;
+            transition: none; /* Резкий прыжок */
         }
 
         #success-message {
@@ -135,7 +130,7 @@
 
         <div id="success-message">
             <h1>Ура! 🥰</h1>
-            <p>Я так и знал(а)! Ты — моё самое большое счастье.</p>
+            <p>Я так и знал(а)! Ты — моё счастье.</p>
             <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNHJueGZueGZueGZueGZueGZueGZueGZueGZueGZueGZueGZueGZueGZueGZueGZueGZueGZ1/26BRv0ThflsHCqDrG/giphy.gif" alt="Happy Cat">
         </div>
     </div>
@@ -149,7 +144,7 @@
         
         let scaleYes = 1;
 
-        // Сердечки
+        // Эффект падающих сердец
         function createHeart() {
             const heart = document.createElement('div');
             heart.className = 'heart';
@@ -160,25 +155,20 @@
         }
         setInterval(createHeart, 300);
 
-        // Функция побега внутри карточки
+        // Функция побега (кнопка прыгает строго внутри белой карточки)
         function escape() {
-            // Увеличиваем кнопку "Да"
+            // Кнопка "Да" растет при каждой попытке нажать "Нет"
             scaleYes += 0.2;
             btnYes.style.transform = `scale(${scaleYes})`;
 
-            // Получаем размеры карточки
-            const cardRect = card.getBoundingClientRect();
-            const btnRect = btnNo.getBoundingClientRect();
-
-            // Переводим кнопку в абсолютное позиционирование ВНУТРИ карточки
+            // Делаем кнопку "Нет" абсолютной внутри карточки
             btnNo.style.position = 'absolute';
 
-            // Вычисляем максимально возможные координаты внутри карточки
-            // (Ширина карточки - Ширина кнопки - небольшой отступ)
+            // Вычисляем доступную область внутри карточки
             const maxX = card.clientWidth - btnNo.offsetWidth - 20;
             const maxY = card.clientHeight - btnNo.offsetHeight - 20;
 
-            // Генерируем случайную позицию
+            // Генерируем случайную позицию внутри этих границ
             const newX = Math.max(10, Math.floor(Math.random() * maxX));
             const newY = Math.max(10, Math.floor(Math.random() * maxY));
 
@@ -186,10 +176,12 @@
             btnNo.style.top = newY + 'px';
             btnNo.style.margin = '0';
             
-            const phrases = ["Мимо!", "Не-а", "Хе-хе", "Упс!", "Никак!"];
+            // Меняем надпись на забавные фразы
+            const phrases = ["Мимо!", "Не-а", "Хе-хе", "Лови!", "Упс!", "Никак!"];
             btnNo.innerText = phrases[Math.floor(Math.random() * phrases.length)];
         }
 
+        // Обработка событий (наведение, клик, тач)
         btnNo.addEventListener('mouseover', escape);
         btnNo.addEventListener('click', (e) => { e.preventDefault(); escape(); });
         btnNo.addEventListener('touchstart', (e) => { 
@@ -197,10 +189,12 @@
             escape(); 
         });
 
+        // Финальный экран
         btnYes.addEventListener('click', () => {
             questionBlock.style.display = 'none';
             successMessage.style.display = 'block';
             btnNo.style.display = 'none';
+            // Салют из сердечек в конце
             setInterval(createHeart, 50); 
         });
     </script>
